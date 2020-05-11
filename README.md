@@ -46,12 +46,13 @@ In this example, I'll use live.videostream.site as the domain.
 - If you are reusing the IP address and have SSH'd to the old servers, remove
  that line from known hosts.
 - SSH to the instance, and enter super user mode.
-  For example (replace with your own key and EC2 DNS address for the instance)
-  ```
-  scp -i ~/.ssh/jitsi-1.pem *.sh ubuntu@live.videostream.site:~
-  ssh -i ~/.ssh/jitsi-1.pem ubuntu@live.videostream.site
-  sudo su -
-  ```
+
+For example (replace with your own key and EC2 DNS address for the instance)
+```
+scp -i ~/.ssh/jitsi-1.pem *.sh ubuntu@live.videostream.site:~
+ssh -i ~/.ssh/jitsi-1.pem ubuntu@live.videostream.site
+sudo su -
+```
 
 ### Prepare variables for scripts
 ```
