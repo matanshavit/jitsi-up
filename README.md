@@ -18,11 +18,15 @@ For new developers, launch a new instance with these settings:
   - Add rule - Type: HTTPS, Source: Anywhere
   - Add rule - Type: Custom TCP, Port: 4443, Source Anywhere
   - Add rule - Type: Custom UDP, Port 10000, Source Anywhere
+
 When you launch, save the settings as a new template to make creating new instances easier.
 
+For launching from template:
 - Launch a new instance from the template.
   Make sure to have the security key (pem file)
-  and the access group has the IP address of the laptop being used
+  and the access group has the IP address of the laptop being used/
+
+Finally, for everyone:
 - Associate an Elastic IP address with the instance
   (can be reused for preserving DNS lookup).
 
