@@ -114,3 +114,11 @@ source /home/ubuntu/5-jibri-up.sh
 
 ## That's it
  You should be able to record and livestream with Jibri now
+
+## Another option - changing the RTMP output
+Edit opt-util-ffmpeg.sh with the address of the RTMP server you want to use.
+To broadcast to more than one server at a time, use Nginx RTMP proxying (not covered here, yet).
+https://community.jitsi.org/t/stream-to-any-or-multiple-rtmp-destinations-record-simultaneously/51943
+```
+source /home/ubuntu/replace-rtmp.sh
+```
