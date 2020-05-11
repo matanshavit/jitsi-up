@@ -45,6 +45,7 @@ source  ~/.bashrc
 ```
 source /home/ubuntu/1-change-host.sh
 ```
+Install the package maintainer's version of the boot grub.
 This will reboot the instance, kicking you off the SSH connection.
 Reconnect to SSH after a few seconds.
 ```
