@@ -35,6 +35,12 @@ In this example, I'll use videostream.site as the domain.
   sudo su -
   ```
 
+### Prepare variables for scripts
+```
+echo "source /home/ubuntu/0-export-variables.sh" >> ~/.bashrc
+source  ~/.bashrc
+```
+
 ### Change the host name to the domain name
 ```
 source /home/ubuntu/1-change-host.sh

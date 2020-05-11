@@ -35,49 +35,49 @@ usermod -aG adm,plugdev jibri
 # configure jitsi components
 
 # insert virtual host for Jibri recorder into prosody config
-echo '' >> /etc/prosody/conf.avail/videostream.site.cfg.lua
-echo 'VirtualHost "recorder.videostream.site"' >> /etc/prosody/conf.avail/videostream.site.cfg.lua
-echo '    modules_enabled = {' >> /etc/prosody/conf.avail/videostream.site.cfg.lua
-echo '        "ping";' >> /etc/prosody/conf.avail/videostream.site.cfg.lua
-echo '    }' >> /etc/prosody/conf.avail/videostream.site.cfg.lua
-echo '    authentication = "internal_plain"' >> /etc/prosody/conf.avail/videostream.site.cfg.lua
+echo ''                                        >> $PROSODY_CONFIG
+echo 'VirtualHost "'"recorder.$DOMAIN_NAME"'"' >> $PROSODY_CONFIG
+echo '    modules_enabled = {'                 >> $PROSODY_CONFIG
+echo '        "ping";'                         >> $PROSODY_CONFIG
+echo '    }'                                   >> $PROSODY_CONFIG
+echo '    authentication = "internal_plain"'   >> $PROSODY_CONFIG
 
 # register prosody users for jibri to authenticate and record
-prosodyctl register jibri auth.videostream.site jibriauthpass
-prosodyctl register recorder recorder.videostream.site jibrirecorderpass
+prosodyctl register jibri    auth."$DOMAIN_NAME"     $JIBRI_PASSWORD
+prosodyctl register recorder recorder."$DOMAIN_NAME" $RECORDER_PASSWORD
 
 # Tell Jicofo to look for Jibri controllers in the MUC created above
-echo 'org.jitsi.jicofo.jibri.BREWERY=JibriBrewery@internal.auth.videostream.site' >> /etc/jitsi/jicofo/sip-communicator.properties
-echo 'org.jitsi.jicofo.jibri.PENDING_TIMEOUT=90' >> /etc/jitsi/jicofo/sip-communicator.properties
+echo "org.jitsi.jicofo.jibri.BREWERY=JibriBrewery@internal.auth.$DOMAIN_NAME" >> $JICOFO_SIP_PROPS
+echo 'org.jitsi.jicofo.jibri.PENDING_TIMEOUT=90'                              >> $JICOFO_SIP_PROPS
 
 # enable live streaming and file recording features in the client
 # and hide the recorder participant
-sed -i "s_// fileRecordingsEnabled: false,_fileRecordingsEnabled: true,_g" /etc/jitsi/meet/videostream.site-config.js
-sed -i "s_// liveStreamingEnabled: false,_liveStreamingEnabled: true,\n    hiddenDomain:'recorder.videostream.site',_g" /etc/jitsi/meet/videostream.site-config.js
+sed -i "s_// fileRecordingsEnabled: false,_fileRecordingsEnabled: true,_g"                                          $JITSI_MEET_CONFIG
+sed -i "s_// liveStreamingEnabled: false,_liveStreamingEnabled: true,\n    hiddenDomain:'recorder.$DOMAIN_NAME',_g" $JITSI_MEET_CONFIG
 
 
 # Configure Jibri
 # make a directory to hold recordings
-mkdir /recordings
-chown jibri:jibri /recordings
+mkdir $RECORDINGS_DIR
+chown jibri:jibri $RECORDINGS_DIR
 
 # configure directory to record to
-sed -i 's|"recording_directory":"/tmp/recordings",|"recording_directory": "/recordings",|g' /etc/jitsi/jibri/config.json
+sed -i 's|"recording_directory":"/tmp/recordings",|"recording_directory": "'"$RECORDINGS_DIR"'",|g'                    $JIBRI_CONFIG
 # no script to run after recording. note: this can upload a file to s3, for example
-sed -i 's|"finalize_recording_script_path": "/path/to/finalize_recording.sh",|"finalize_recording_script_path": "",|g' /etc/jitsi/jibri/config.json
+sed -i 's|"finalize_recording_script_path": "/path/to/finalize_recording.sh",|"finalize_recording_script_path": "",|g' $JIBRI_CONFIG
 # set servers and login
-sed -i 's|"prod.xmpp.host.net"|"videostream.site"|g' /etc/jitsi/jibri/config.json
-sed -i 's|"xmpp_domain": "xmpp.domain",|"xmpp_domain": "videostream.site",|g' /etc/jitsi/jibri/config.json
-sed -i 's|"domain": "auth.xmpp.domain",|"domain": "auth.videostream.site",|g' /etc/jitsi/jibri/config.json
+sed -i 's|"prod.xmpp.host.net"|"'"$DOMAIN_NAME"'"|g'                                                                   $JIBRI_CONFIG
+sed -i 's|"xmpp_domain": "xmpp.domain",|"xmpp_domain": "'"$DOMAIN_NAME"'",|g'                                          $JIBRI_CONFIG
+sed -i 's|"domain": "auth.xmpp.domain",|"domain": "auth.'"$DOMAIN_NAME"'",|g'                                          $JIBRI_CONFIG
 # set the first username and password for auth
-sed -i '0,/"username": "username",/{s/"username": "username",/"username": "jibri",/g}' /etc/jitsi/jibri/config.json
-sed -i '0,/"password": "password"/{s/"password": "password"/"password": "jibriauthpass"/g}' /etc/jitsi/jibri/config.json
-sed -i 's|"domain": "internal.auth.xmpp.domain",|"domain": "internal.auth.videostream.site",|g' /etc/jitsi/jibri/config.json
-sed -i 's|"nickname": "jibri-nickname"|"nickname": "jibri"|g' /etc/jitsi/jibri/config.json
-sed -i 's|"domain": "recorder.xmpp.domain",|"domain": "recorder.videostream.site",|g' /etc/jitsi/jibri/config.json
+sed -i '0,/"username": "username",/{s/"username": "username",/"username": "jibri",/g}'                                 $JIBRI_CONFIG
+sed -i '0,/"password": "password"/{s/"password": "password"/"password": "'"$JIBRI_PASSWORD"'"/g}'                      $JIBRI_CONFIG
+sed -i 's|"domain": "internal.auth.xmpp.domain",|"domain": "internal.auth.'"$DOMAIN_NAME"'",|g'                        $JIBRI_CONFIG
+sed -i 's|"nickname": "jibri-nickname"|"nickname": "jibri"|g'                                                          $JIBRI_CONFIG
+sed -i 's|"domain": "recorder.xmpp.domain",|"domain": "recorder.'"$DOMAIN_NAME"'",|g'                                  $JIBRI_CONFIG
 # set the second username and password for the recorder to join the special room (brewery)
-sed -i 's|"username": "username",|"username": "recorder",|g' /etc/jitsi/jibri/config.json
-sed -i 's|"password": "password"|"password": "jibrirecorderpass"|g' /etc/jitsi/jibri/config.json
+sed -i 's|"username": "username",|"username": "recorder",|g'                                                           $JIBRI_CONFIG
+sed -i 's|"password": "password"|"password": "'"$RECORDER_PASSWORD"'"|g'                                               $JIBRI_CONFIG
 
 
 # start Jibri when the server starts
