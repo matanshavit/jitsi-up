@@ -9,5 +9,7 @@ export JITSI_PASSWORD=password123
 export APP_NAME="Live Video"
 export JIBRI_CONFIG=/etc/jitsi/jibri/config.json
 export RECORDINGS_DIR=/recordings
+
+# these could be changed or generated new each time
 export JIBRI_PASSWORD=ZHpUabnRR477
 export RECORDER_PASSWORD=uGV46eVo0Qg3
