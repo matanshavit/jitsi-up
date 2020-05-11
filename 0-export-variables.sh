@@ -1,4 +1,4 @@
-export DOMAIN_NAME=livevideo.website
+export DOMAIN_NAME=live.videostream.site
 export PROSODY_GLOBAL_CONFIG=/etc/prosody/prosody.cfg.lua
 export PROSODY_CONFIG=/etc/prosody/conf.avail/"$DOMAIN_NAME".cfg.lua
 export JICOFO_SIP_PROPS=/etc/jitsi/jicofo/sip-communicator.properties

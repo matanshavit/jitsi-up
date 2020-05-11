@@ -7,31 +7,45 @@ start a new Jitsi server with Jibri
 I've created an instance template that sets up a
 t3.large instance with Ubuntu 18.04 LTS on AMD64 chips,
 my security key, security groups for public access,
-and only my ssh access (using my laptop IP)
+and only my ssh access (using my laptop IP).
+
+For new developers, launch a new instance with these settings:
+- Ubuntu Server 18.04 LTS (64-bit x86)
+- t3.xlarge 4 CPUs & 16 Gb RAM
+- New security group. Pick a name like Jitsi-Security-Group.
+  - For security, change the SSH rule Source to "My IP" to restrict access.
+  - Add rule - Type: HTTP, Source: Anywhere
+  - Add rule - Type: HTTPS, Source: Anywhere
+  - Add rule - Type: Custom TCP, Port: 4443, Source Anywhere
+  - Add rule - Type: Custom UDP, Port 10000, Source Anywhere
+When you launch, save the settings as a new template to make creating new instances easier.
 
 - Launch a new instance from the template.
   Make sure to have the security key (pem file)
   and the access group has the IP address of the laptop being used
-- Att
 - Associate an Elastic IP address with the instance
-  (can be reused for preserving DNS lookup)
+  (can be reused for preserving DNS lookup).
 
 ### Set up DNS
 To issue security ceritficates, Let's Encrypt (the free one),
 seems not to allow AWS namesapce domains. I set up videostream.site
 to point to the Elastic IP address we have in AWS
 - Point a DNS lookup to the Elastic IP address of the EC2 instance
-In this example, I'll use videostream.site as the domain.
+In this example, I'll use live.videostream.site as the domain.
+
+### Edit 0-export-variable.sh
+- Change DOMAIN_NAME to the domain set up above.
+- Change JITSI_USER and JITSI_PASSWORD to set up a user that will have permission to create meetings
+- Change APP_NAME to the name of you app.
 
 ### Copy files and SSH into EC2 instance
 - If you are reusing the IP address and have SSH'd to the old servers, remove
  that line from known hosts.
- To do - can this be automated from the command line?
 - SSH to the instance, and enter super user mode.
   For example (replace with your own key and EC2 DNS address for the instance)
   ```
-  scp -i ~/.ssh/jitsi-1.pem *.sh ubuntu@videostream.site:~
-  ssh -i ~/.ssh/jitsi-1.pem ubuntu@videostream.site
+  scp -i ~/.ssh/jitsi-1.pem *.sh ubuntu@live.videostream.site:~
+  ssh -i ~/.ssh/jitsi-1.pem ubuntu@live.videostream.site
   sudo su -
   ```
 
@@ -49,7 +63,7 @@ Install the package maintainer's version of the boot grub.
 This will reboot the instance, kicking you off the SSH connection.
 Reconnect to SSH after a few seconds.
 ```
-ssh -i ~/.ssh/jitsi-1.pem ubuntu@videostream.site
+ssh -i ~/.ssh/jitsi-1.pem ubuntu@live.videostream.site
 sudo su -
 ```
 
@@ -80,7 +94,7 @@ source /home/ubuntu/4-generic-kernel.sh
 This will reboot the instance, kicking you off the SSH connection.
 Reconnect to SSH after a few seconds.
 ```
-ssh -i ~/.ssh/jitsi-1.pem ubuntu@videostream.site
+ssh -i ~/.ssh/jitsi-1.pem ubuntu@live.videostream.site
 sudo su -
 ```
 The Linux name should now be generic.
