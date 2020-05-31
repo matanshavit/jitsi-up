@@ -24,7 +24,7 @@ When you launch, save the settings as a new template to make creating new instan
 For launching from template:
 - Launch a new instance from the template.
   Make sure to have the security key (pem file)
-  and the access group has the IP address of the laptop being used/
+  and the access group has the IP address of the laptop being used.
 
 Finally, for everyone:
 - Associate an Elastic IP address with the instance
@@ -79,6 +79,7 @@ https://github.com/jitsi/jitsi-meet/blob/master/doc/quick-install.md#advanced-co
 ```
 source /home/ubuntu/2-increase-task-limit.sh
 ```
+
 ### Install Jitsi
 ```
 source /home/ubuntu/3-jitsi-up.sh
@@ -89,7 +90,7 @@ source /home/ubuntu/3-jitsi-up.sh
 
 ## Installing Jibri
 
-## Use generic Linux kernel
+### Use generic Linux kernel
 The AWS Linux kernel does not have the ALSA sound module.
 The generic kernel has it.
 ```

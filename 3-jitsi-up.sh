@@ -69,7 +69,7 @@ sed -i "s/DISABLE_RINGING: false,/DISABLE_RINGING: true,/g"                     
 sed -i "s/CONNECTION_INDICATOR_DISABLED: false,/CONNECTION_INDICATOR_DISABLED: true,/g"           $JITSI_MEET_INTERFACE_CONFIG
 # remove the video quality for a cleaner interface
 sed -i "s/VIDEO_QUALITY_LABEL_DISABLED: false,/VIDEO_QUALITY_LABEL_DISABLED: true,/g"             $JITSI_MEET_INTERFACE_CONFIG
-# hirde recent list of meetings
+# hide recent list of meetings
 sed -i "s/ RECENT_LIST_ENABLED: true,/ RECENT_LIST_ENABLED: false,/g"                             $JITSI_MEET_INTERFACE_CONFIG
 
 # change the app title bar to app title
