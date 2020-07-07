@@ -32,10 +32,8 @@ Finally, for everyone:
 
 ### Set up DNS
 To issue security ceritficates, Let's Encrypt (the free one),
-seems not to allow AWS namesapce domains. I set up videostream.site
-to point to the Elastic IP address we have in AWS
+seems not to allow AWS namespace domains.
 - Point a DNS lookup to the Elastic IP address of the EC2 instance
-In this example, I'll use live.videostream.site as the domain.
 
 ### Edit 0-export-variable.sh
 - Change DOMAIN_NAME to the domain set up above.
@@ -49,8 +47,8 @@ In this example, I'll use live.videostream.site as the domain.
 
 For example (replace with your own key and EC2 DNS address for the instance)
 ```
-scp -i ~/.ssh/jitsi-1.pem *.sh ubuntu@live.videostream.site:~
-ssh -i ~/.ssh/jitsi-1.pem ubuntu@live.videostream.site
+scp -i ~/.ssh/jitsi-1.pem *.sh ubuntu@example.com:~
+ssh -i ~/.ssh/jitsi-1.pem ubuntu@example.com
 sudo su -
 ```
 
@@ -68,7 +66,7 @@ Install the package maintainer's version of the boot grub.
 This will reboot the instance, kicking you off the SSH connection.
 Reconnect to SSH after a few seconds.
 ```
-ssh -i ~/.ssh/jitsi-1.pem ubuntu@live.videostream.site
+ssh -i ~/.ssh/jitsi-1.pem ubuntu@example.com
 sudo su -
 ```
 
@@ -100,7 +98,7 @@ source /home/ubuntu/4-generic-kernel.sh
 This will reboot the instance, kicking you off the SSH connection.
 Reconnect to SSH after a few seconds.
 ```
-ssh -i ~/.ssh/jitsi-1.pem ubuntu@live.videostream.site
+ssh -i ~/.ssh/jitsi-1.pem ubuntu@example.com
 sudo su -
 ```
 The Linux name should now be generic.
